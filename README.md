@@ -223,7 +223,7 @@ This project helped me gain practical experience with:
 
 GitHub: https://github.com/YashPratapRai
 
-LinkedIn: *(Add your LinkedIn profile here)*
+LinkedIn: https://www.linkedin.com/in/yashprataprai
 
 ---
 
