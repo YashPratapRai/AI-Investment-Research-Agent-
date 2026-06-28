@@ -27,17 +27,17 @@ const DecisionCard = ({ decision = {}, analysis = {} }) => {
       animate="show"
       className="space-y-8"
     >
-      {/* Grid: Recommendation & Rationale | Strengths & Weaknesses */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        {/* Card 1: AI Decision Rationale */}
+       
         <motion.div
           variants={itemVariants}
           className={`glass-panel p-6 md:p-8 rounded-3xl border shadow-xl relative overflow-hidden flex flex-col justify-between ${
             isInvest ? "border-emerald-500/20 glow-green" : "border-rose-500/20 glow-red"
           }`}
         >
-          {/* Subtle background graphics */}
+        
           <div className="absolute -left-10 -bottom-10 w-40 h-40 rounded-full bg-slate-900/40 blur-xl pointer-events-none" />
           
           <div className="space-y-6">
@@ -46,7 +46,7 @@ const DecisionCard = ({ decision = {}, analysis = {} }) => {
               Investment Recommendation
             </h2>
 
-            {/* Huge Recommendation badge */}
+           
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-950/50 border border-slate-800/80">
               <div className="flex items-center gap-4">
                 <div
@@ -74,7 +74,7 @@ const DecisionCard = ({ decision = {}, analysis = {} }) => {
                 </div>
               </div>
 
-              {/* Confidence ring/metric */}
+              
               <div className="text-left sm:text-right">
                 <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block">
                   AI Confidence
@@ -85,7 +85,7 @@ const DecisionCard = ({ decision = {}, analysis = {} }) => {
               </div>
             </div>
 
-            {/* Reasons / Reasoning */}
+            
             <div className="space-y-3">
               <h3 className="text-sm font-bold text-slate-350 uppercase tracking-wider flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-emerald-400" />
@@ -104,7 +104,7 @@ const DecisionCard = ({ decision = {}, analysis = {} }) => {
               </ul>
             </div>
 
-            {/* Risks */}
+         
             <div className="space-y-3 pt-4 border-t border-slate-800/60">
               <h3 className="text-sm font-bold text-slate-350 uppercase tracking-wider flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-rose-400" />
@@ -126,7 +126,6 @@ const DecisionCard = ({ decision = {}, analysis = {} }) => {
           </div>
         </motion.div>
 
-        {/* Card 2: Company Strengths & Weaknesses */}
         <motion.div
           variants={itemVariants}
           className="glass-panel p-6 md:p-8 rounded-3xl border border-slate-800 shadow-xl flex flex-col justify-between"
@@ -137,7 +136,7 @@ const DecisionCard = ({ decision = {}, analysis = {} }) => {
               Company Analysis Profile
             </h2>
 
-            {/* Strengths */}
+           
             <div className="space-y-4">
               <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
                 <ArrowUpRight className="w-4 h-4" />
@@ -161,7 +160,7 @@ const DecisionCard = ({ decision = {}, analysis = {} }) => {
               </div>
             </div>
 
-            {/* Weaknesses */}
+       
             <div className="space-y-4 pt-4 border-t border-slate-800/60">
               <h3 className="text-sm font-bold text-rose-400 uppercase tracking-wider flex items-center gap-2">
                 <ArrowDownRight className="w-4 h-4" />
