@@ -1,57 +1,66 @@
 import axios from "axios";
 
-const BASE_URL = "https://financialmodelingprep.com/api/v3";
+const API_KEY = process.env.FINNHUB_API_KEY;
 
 export const getCompanyFinancials = async (company) => {
   try {
-    const apiKey = process.env.FMP_API_KEY;
-
     // Search company
-    const searchRes = await axios.get(
-      `${BASE_URL}/search`,
+    const search = await axios.get(
+      "https://finnhub.io/api/v1/search",
       {
         params: {
-          query: company,
-          limit: 1,
-          exchange: "NASDAQ",
-          apikey: apiKey,
+          q: company,
+          token: API_KEY,
         },
       }
     );
 
-    if (!searchRes.data.length) {
+    if (!search.data.result.length) {
       throw new Error("Company not found.");
     }
 
-    const symbol = searchRes.data[0].symbol;
+    const symbol = search.data.result[0].symbol;
 
-    // Company Profile
-    const profileRes = await axios.get(
-      `${BASE_URL}/profile/${symbol}`,
+    // Quote
+    const quote = await axios.get(
+      "https://finnhub.io/api/v1/quote",
       {
         params: {
-          apikey: apiKey,
+          symbol,
+          token: API_KEY,
         },
       }
     );
 
-    const profile = profileRes.data[0];
+    // Company Profile
+    const profile = await axios.get(
+      "https://finnhub.io/api/v1/stock/profile2",
+      {
+        params: {
+          symbol,
+          token: API_KEY,
+        },
+      }
+    );
 
     return {
-      symbol: profile.symbol,
-      companyName: profile.companyName,
-      currentPrice: profile.price,
-      marketCap: profile.mktCap,
-      peRatio: profile.pe,
-      currency: profile.currency,
-      exchange: profile.exchangeShortName,
-      fiftyTwoWeekHigh: profile.range?.split("-")[1]?.trim(),
-      fiftyTwoWeekLow: profile.range?.split("-")[0]?.trim(),
-      sector: profile.sector,
-      industry: profile.industry,
+      symbol,
+      companyName: profile.data.name,
+      currentPrice: quote.data.c,
+      marketCap: profile.data.marketCapitalization,
+      peRatio: null, // Finnhub free quote doesn't provide PE here
+      currency: profile.data.currency,
+      exchange: profile.data.exchange,
+      fiftyTwoWeekHigh: quote.data.h,
+      fiftyTwoWeekLow: quote.data.l,
+      sector: profile.data.finnhubIndustry,
+      industry: profile.data.finnhubIndustry,
     };
   } catch (error) {
-    console.error(error.response?.data || error.message);
+    console.error(
+      "Finnhub Error:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
