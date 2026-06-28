@@ -1,45 +1,57 @@
-import YahooFinance from "yahoo-finance2";
+import axios from "axios";
 
-const yahooFinance = new YahooFinance({
-  suppressNotices: ["yahooSurvey"],
-});
+const BASE_URL = "https://financialmodelingprep.com/api/v3";
 
 export const getCompanyFinancials = async (company) => {
   try {
-    console.log("Searching company:", company);
+    const apiKey = process.env.FMP_API_KEY;
 
-    const searchResult = await yahooFinance.search(company);
+    // Search company
+    const searchRes = await axios.get(
+      `${BASE_URL}/search`,
+      {
+        params: {
+          query: company,
+          limit: 1,
+          exchange: "NASDAQ",
+          apikey: apiKey,
+        },
+      }
+    );
 
-    console.log("Search Result:", searchResult);
-
-    if (!searchResult?.quotes?.length) {
+    if (!searchRes.data.length) {
       throw new Error("Company not found.");
     }
 
-    const symbol = searchResult.quotes[0].symbol;
+    const symbol = searchRes.data[0].symbol;
 
-    console.log("Symbol:", symbol);
+    // Company Profile
+    const profileRes = await axios.get(
+      `${BASE_URL}/profile/${symbol}`,
+      {
+        params: {
+          apikey: apiKey,
+        },
+      }
+    );
 
-    const quote = await yahooFinance.quote(symbol);
-
-    console.log("Quote:", quote);
+    const profile = profileRes.data[0];
 
     return {
-      symbol,
-      companyName: quote.longName || quote.shortName,
-      currentPrice: quote.regularMarketPrice,
-      marketCap: quote.marketCap,
-      peRatio: quote.trailingPE,
-      currency: quote.currency,
-      exchange: quote.fullExchangeName,
-      fiftyTwoWeekHigh: quote.fiftyTwoWeekHigh,
-      fiftyTwoWeekLow: quote.fiftyTwoWeekLow,
+      symbol: profile.symbol,
+      companyName: profile.companyName,
+      currentPrice: profile.price,
+      marketCap: profile.mktCap,
+      peRatio: profile.pe,
+      currency: profile.currency,
+      exchange: profile.exchangeShortName,
+      fiftyTwoWeekHigh: profile.range?.split("-")[1]?.trim(),
+      fiftyTwoWeekLow: profile.range?.split("-")[0]?.trim(),
+      sector: profile.sector,
+      industry: profile.industry,
     };
   } catch (error) {
-    console.error("========== YAHOO FINANCE ERROR ==========");
-    console.error(error);
-    console.error(error.stack);
-
+    console.error(error.response?.data || error.message);
     throw error;
   }
 };
