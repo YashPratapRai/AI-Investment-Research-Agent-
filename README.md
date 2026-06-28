@@ -355,6 +355,14 @@ Risk Score:
 62
 
 ---
+# Screenshots 
+🏠 Home Page
+![Home Page](image.png)
+⏳ Loading Screen
+![Loading Screen](image-1.png)
+📊 Final Dashboard
+![alt text](<Screenshot 2026-06-29 001447.png>)
+
 
 # Future Improvements
 
