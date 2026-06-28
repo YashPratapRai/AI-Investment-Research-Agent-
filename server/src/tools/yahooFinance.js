@@ -1,11 +1,16 @@
 import YahooFinance from "yahoo-finance2";
 
-const yahooFinance = new YahooFinance();
+const yahooFinance = new YahooFinance({
+  suppressNotices: ["yahooSurvey"],
+});
 
 export const getCompanyFinancials = async (company) => {
   try {
-    // Find the correct stock symbol
+    console.log("Searching company:", company);
+
     const searchResult = await yahooFinance.search(company);
+
+    console.log("Search Result:", searchResult);
 
     if (!searchResult?.quotes?.length) {
       throw new Error("Company not found.");
@@ -13,8 +18,11 @@ export const getCompanyFinancials = async (company) => {
 
     const symbol = searchResult.quotes[0].symbol;
 
-    // Fetch quote data
+    console.log("Symbol:", symbol);
+
     const quote = await yahooFinance.quote(symbol);
+
+    console.log("Quote:", quote);
 
     return {
       symbol,
@@ -27,8 +35,11 @@ export const getCompanyFinancials = async (company) => {
       fiftyTwoWeekHigh: quote.fiftyTwoWeekHigh,
       fiftyTwoWeekLow: quote.fiftyTwoWeekLow,
     };
-  } catch (err) {
-    console.error("Yahoo Finance Error:", err);
-    throw new Error("Unable to fetch financial data.");
+  } catch (error) {
+    console.error("========== YAHOO FINANCE ERROR ==========");
+    console.error(error);
+    console.error(error.stack);
+
+    throw error;
   }
 };
